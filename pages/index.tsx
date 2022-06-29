@@ -1,4 +1,4 @@
-import ShoppingList from "../src/components/InputCheck";
+import ShoppingList from "../src/components/ShoppingList";
 
 function Home(){
   return(

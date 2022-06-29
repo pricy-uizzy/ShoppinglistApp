@@ -1,10 +1,10 @@
-import { Container, ContainerForm, ContentIcon, ContentList, Title, ButtonRemove, ButtonMinus, ButtonPlus, TitleTwo } from "./style"
+import { Container, ContainerForm, ContentIcon, ContentList, Title, ButtonRemove, ButtonMinus, ButtonPlus, TitleTwo, ItemLista, ButtonCart, Footer, Total, TotalNum } from "./style"
 import React, { createElement, useEffect, useState } from 'react';
-import { Form, Input, Button, Checkbox, InputNumber } from 'antd';
+import { Form, Input, Button, Checkbox, InputNumber, Modal, Badge, Space } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { v4 as uuidv4 } from 'uuid';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleMinus, faCirclePlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faCartShopping, faCircleMinus, faCirclePlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 interface Iitem {
     id: string
@@ -17,7 +17,6 @@ interface Iitem {
 
 function ShoppingList() {
     const [itens, setItens] = useState<Iitem[]>([])
-    console.log(itens)
 
     useEffect(() => {
         let localItens = localStorage.getItem("itens");
@@ -104,6 +103,11 @@ function ShoppingList() {
         }))
     }
 
+
+
+    const [modalVisible, setModalVisible] = useState(false);
+
+
     function renderItem(item: Iitem) {
 
         return (
@@ -133,52 +137,69 @@ function ShoppingList() {
     function calculaValor() {
         let itensFIltrados = itens.filter((item) => item.check);
         if (itensFIltrados.length == 0) return 0;
-        return itensFIltrados.map((item) => item.valor ? item.valor : 0).reduce((previousValue, currentValue) => previousValue + currentValue)
+        return itensFIltrados.map((item) => item.valor ? item.quantidade * item.valor : 0).reduce((previousValue, currentValue) => previousValue + currentValue)
     }
+
+
 
     return (
 
         <Container>
-            
+
             <ContainerForm>
                 <Form
                     name="basic"
                     onFinish={onFinish}
                 >
-                    <Form.Item label="Item" name="nameItem" rules={[{ required: true, message: 'Please input your item!' }]}>
-                        <Input placeholder="Adicione um Item a lista" />
+                    <Form.Item label="ITEM" name="nameItem" rules={[{ required: true, message: 'FILL IN THE FIELD' }]}>
+                        <Input placeholder="PLEASE INPUT YOUR ITEM!" />
                     </Form.Item>
 
                     {/* <Form.Item label="descricao" name="descricao" >
                     <Input placeholder="Adicione uma descrição" />
                     </Form.Item> */}
 
-                    <Form.Item label="Quantidade" name="quantidade" rules={[{ required: true, message: 'Please input your quantidy!' }]}>
+                    <Form.Item label="QUANTIDADE" name="quantidade" rules={[{ required: true, message: 'PLEASE INPUT YOUR QUANTITY!' }]}>
                         <InputNumber />
                     </Form.Item>
 
                     <Form.Item >
-                        <Button htmlType="submit">Enviar</Button>
+                        <Button htmlType="submit">ENVIAR</Button>
                     </Form.Item>
                 </Form>
             </ContainerForm>
 
             <div>
                 <div>
-                <Title>ShoppingList</Title>
-                    <ul className="lista">
+                    <Title>SHOPPINGLIST</Title>
+                    <ItemLista className="lista">
                         {itens.filter((item) => !item.check).map(renderItem)}
-                    </ul>
-                </div>
-
-                <div style={{ width: 250 }}>
-                    <TitleTwo>In the bag</TitleTwo>
-                    <ul>
-                    {itens.filter((item) => item.check).map(renderItem)}
-                    </ul>
-                    <p><strong>Total:</strong>{calculaValor()}</p>
+                    </ItemLista>
                 </div>
             </div>
+
+            <Badge count={itens.filter((item) => item.check).length} style={{ top: -11, right: -150 }}>
+                <ButtonCart onClick={() => setModalVisible(true)}> <FontAwesomeIcon icon={faCartShopping} />  </ButtonCart>
+            </Badge>
+
+            <Modal
+                style={{ width: 250 }}
+                centered visible={modalVisible}
+                footer={[<Button onClick={() => setModalVisible(false)}>OK</Button>]}
+
+            >
+                <TitleTwo>IN THE BAG</TitleTwo>
+
+                <ItemLista>
+                    {itens.filter((item) => item.check).map(renderItem)}
+                </ItemLista>
+                <Footer>
+                    <Total>TOTAL:</Total>
+                    <TotalNum>{calculaValor()} </TotalNum>
+                </Footer>
+            </Modal>
+
+
         </Container>
     )
 }
