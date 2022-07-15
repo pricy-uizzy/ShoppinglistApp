@@ -10,6 +10,7 @@ export const Container = styled.div`
     padding: 20px;
     border: 5px solid #999898;
     border-radius: 5px;
+  
 `
 
 export const ContentList = styled.div`
@@ -24,33 +25,33 @@ export const ContentIcon = styled.div`
     display: flex;
     gap: 4px;
 `
-export const ButtonRemove = styled.div`
-    background: #447D5B;
-    border-radius: 100%;
-    border: 1px solid;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    padding: 2px;
-`
-export const ButtonMinus = styled.div`
-    background: #447D5B;
-    border-radius: 100%;
-    border: 1px solid;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    padding: 2px;
-`
-export const ButtonPlus = styled.div`
-    background: #447D5B;
-    border-radius: 100%;
-    border: 1px solid;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    padding: 2px;
-`
+// export const ButtonRemove = styled.div`
+//     background: #447D5B;
+//     border-radius: 100%;
+//     border: 1px solid;
+//     width: 30px;
+//     height: 30px;
+//     text-align: center;
+//     padding: 2px;
+// `
+// export const ButtonMinus = styled.div`
+//     background: #447D5B;
+//     border-radius: 100%;
+//     border: 1px solid;
+//     width: 30px;
+//     height: 30px;
+//     text-align: center;
+//     padding: 2px;
+// `
+// export const ButtonPlus = styled.div`
+//     background: #447D5B;
+//     border-radius: 100%;
+//     border: 1px solid;
+//     width: 30px;
+//     height: 30px;
+//     text-align: center;
+//     padding: 2px;
+// `
 
 
 export const ContainerForm = styled.div`

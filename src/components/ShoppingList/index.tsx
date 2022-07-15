@@ -1,10 +1,14 @@
-import { Container, ContainerForm, ContentIcon, ContentList, Title, ButtonRemove, ButtonMinus, ButtonPlus, TitleTwo, ItemLista, ButtonCart, Footer, Total, TotalNum } from "./style"
+import { Container, ContainerForm, ContentIcon, ContentList, Title, TitleTwo, ItemLista, ButtonCart, Footer, Total, TotalNum } from "./style"
 import React, { createElement, useEffect, useState } from 'react';
-import { Form, Input, Button, Checkbox, InputNumber, Modal, Badge, Space } from 'antd';
+import { InputNumber, Modal, Badge, Space, Checkbox } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { v4 as uuidv4 } from 'uuid';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faCircleMinus, faCirclePlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import Button from "../commons/Button";
+import FormComponent from "../Form";
+import ButtonsContent from "../ButtonsContent";
+
 
 interface Iitem {
     id: string
@@ -56,6 +60,9 @@ function ShoppingList() {
             return item;
         }));
     };
+
+
+
 
     //Logica Botao de Minus
     const onRemove = (id: string) => {
@@ -116,17 +123,21 @@ function ShoppingList() {
                     {item.nameItem}
                 </Checkbox>
                 <ContentIcon>
-                    <ButtonRemove onClick={() => onRemove(item.id)}> <FontAwesomeIcon icon={faTrashCan} /> </ButtonRemove>
-                    <ButtonMinus onClick={() => onMinus(item.id)}> <FontAwesomeIcon icon={faCircleMinus} /> </ButtonMinus>
                     <strong>{item.quantidade}</strong>
-                    <ButtonPlus onClick={() => onPlus(item.id)}> <FontAwesomeIcon icon={faCirclePlus} /> </ButtonPlus>
-
+                    <ButtonsContent
+                        id={item.id}
+                        onMinus={onMinus}
+                        onPlus={onPlus}
+                        onRemove={onRemove}
+                    />
                 </ContentIcon>
                 {item.check && <InputNumber
+                    keyboard
                     formatter={value => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                     parser={value => value!.replace(/\$\s?|(,*)/g, '')}
                     onChange={(value: string) => {
                         onChangeValor(item.id, parseFloat(value));
+                        console.log(value)
                     }}
                 />}
                 {/* {item.descricao} */}
@@ -145,29 +156,15 @@ function ShoppingList() {
     return (
 
         <Container>
+            <style global jsx>{`
+                  .ant-modal-footer {
+                    border-top: none !important;
+                }
+            `}</style>
 
-            <ContainerForm>
-                <Form
-                    name="basic"
-                    onFinish={onFinish}
-                >
-                    <Form.Item label="ITEM" name="nameItem" rules={[{ required: true, message: 'FILL IN THE FIELD' }]}>
-                        <Input placeholder="PLEASE INPUT YOUR ITEM!" />
-                    </Form.Item>
-
-                    {/* <Form.Item label="descricao" name="descricao" >
-                    <Input placeholder="Adicione uma descrição" />
-                    </Form.Item> */}
-
-                    <Form.Item label="QUANTIDADE" name="quantidade" rules={[{ required: true, message: 'PLEASE INPUT YOUR QUANTITY!' }]}>
-                        <InputNumber />
-                    </Form.Item>
-
-                    <Form.Item >
-                        <Button htmlType="submit">ENVIAR</Button>
-                    </Form.Item>
-                </Form>
-            </ContainerForm>
+            <div>
+                <FormComponent name="basic" onFinish={onFinish} />
+            </div>
 
             <div>
                 <div>
@@ -183,10 +180,11 @@ function ShoppingList() {
             </Badge>
 
             <Modal
-                style={{ width: 250 }}
-                centered visible={modalVisible}
+                style={{ width: 250, height: 515 }}
+                closable={false}
+                centered
+                visible={modalVisible}
                 footer={[<Button onClick={() => setModalVisible(false)}>OK</Button>]}
-
             >
                 <TitleTwo>IN THE BAG</TitleTwo>
 
